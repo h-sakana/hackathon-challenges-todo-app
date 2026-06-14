@@ -1,0 +1,42 @@
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--color-boundary-border);
+  background-color: var(--color-header);
+}
+
+h1 {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-name-icon {
+  border: 1px solid var(--color-boundary-border);
+  background-color: var(--color-secondary);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+.logout-btn {
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--color-boundary-border);
+}

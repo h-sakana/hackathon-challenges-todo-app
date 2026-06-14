@@ -1,0 +1,138 @@
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  max-width: 350px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+h2 {
+  width: 100%;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.checkbox {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 3px solid #d1d5db;
+  background: white;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.checkbox.checked {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+.todo-create-form {
+  width: 100%;
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.todo-create-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--color-input-border);
+  border-radius: 12px;
+  background-color: var(--color-input-bg);
+  transition: border-color 0.2s;
+}
+
+.todo-create-input:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.todo-create-btn {
+  white-space: nowrap;
+  padding: 12px 16px;
+  border: 1px solid var(--color-input-border);
+  border-radius: 12px;
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.todo-list {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.todo-list ul {
+  width: 100%;
+}
+
+.todo-tab {
+  width: 100%;
+}
+
+.todo-tab ul {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+  width: 100%;
+}
+
+.todo-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  list-style: none;
+  padding: 16px;
+  width: 100%;
+  border-bottom: 1px solid var(--color-boundary-border);
+}
+
+.todo {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.todo-btns {
+  display: flex;
+  gap: 16px;
+}
+
+.todo-btns button {
+  color: var(--color-primary);
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.tab {
+  cursor: pointer;
+}
+
+.select-tab {
+  border-bottom: 2px solid;
+  padding-bottom: 6px;
+}
+
+.not-select-tab {
+  color: var(--color-not-active);
+}
+
+.checked-todo-name {
+  text-decoration: line-through;
+}
