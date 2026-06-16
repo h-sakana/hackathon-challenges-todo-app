@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+*.pyc
+
+# environment
+.env
+
+# ather
+venv
