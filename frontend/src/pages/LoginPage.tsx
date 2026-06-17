@@ -45,11 +45,11 @@ export const LoginPage = () => {
         body: JSON.stringify(request),
       });
 
-      if (!response.ok) {
-        throw new Error("ログイン失敗");
-      }
-
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "ログイン失敗");
+      }
 
       localStorage.setItem("accessToken", data.access);
       localStorage.setItem("refreshToken", data.refresh);
@@ -63,7 +63,9 @@ export const LoginPage = () => {
     } catch (error) {
       console.error(error);
       alert(
-        "ログインできませんでした。\nユーザー名とパスワードを確認してください。"
+        error instanceof Error
+          ? error.message
+          : "ログインできませんでした。\nユーザー名とパスワードを確認してください。"
       );
     }
   };

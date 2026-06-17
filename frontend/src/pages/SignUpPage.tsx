@@ -39,7 +39,8 @@ export const SignUpPage = () => {
       });
 
       if (!response.ok) {
-        throw new Error("アカウント作成失敗");
+        const data = await response.json();
+        throw new Error(data.message || "アカウント作成失敗");
       }
 
       alert("アカウントを作成しました。\nログインしてください。");
@@ -48,7 +49,12 @@ export const SignUpPage = () => {
       navigate("/login", { state: { userName: inputUserName } });
     } catch (error) {
       console.error(error);
-      alert("アカウント作成に失敗しました。");
+
+      alert(
+        error instanceof Error
+          ? error.message
+          : "アカウント作成に失敗しました。"
+      );
     }
   };
 
