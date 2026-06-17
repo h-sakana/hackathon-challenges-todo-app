@@ -16,6 +16,10 @@ export const SignUpPage = () => {
   const [inputPassword, setInputPassword] = useState("");
   /** 入力されたパスワード（確認用） */
   const [inputPasswordConfirm, setInputPasswordConfirm] = useState("");
+  /** エラーメッセージ表示（ユーザー名の入力桁数） */
+  const [isUserNameError, setIsUserNameError] = useState(false);
+  /** エラーメッセージ表示（パスワードの入力桁数） */
+  const [isPasswordError, setIsPasswordError] = useState(false);
 
   /** アカウントを作成 */
   const handleCreateAccount = async () => {
@@ -61,10 +65,25 @@ export const SignUpPage = () => {
             <input
               type="text"
               value={inputUserName}
-              onChange={(e) => setInputUserName(e.target.value)}
+              onChange={(e) => {
+                setInputUserName(e.target.value);
+                setIsUserNameError(false);
+              }}
+              onBlur={() => {
+                if (inputUserName.length < 3) {
+                  setIsUserNameError(true);
+                } else {
+                  setIsUserNameError(false);
+                }
+              }}
               placeholder="3文字以上"
               autoComplete="username"
             />
+            {isUserNameError && (
+              <p className="input-error-msg">
+                ユーザー名は3文字以上で入力してください。
+              </p>
+            )}
           </div>
 
           <div className="input-group">
@@ -72,10 +91,25 @@ export const SignUpPage = () => {
             <input
               type="password"
               value={inputPassword}
-              onChange={(e) => setInputPassword(e.target.value)}
+              onChange={(e) => {
+                setInputPassword(e.target.value);
+                setIsPasswordError(false);
+              }}
+              onBlur={() => {
+                if (inputPassword.length < 8) {
+                  setIsPasswordError(true);
+                } else {
+                  setIsPasswordError(false);
+                }
+              }}
               placeholder="8文字以上"
               autoComplete="new-password"
             />
+            {isPasswordError && (
+              <p className="input-error-msg">
+                パスワードは8文字以上で入力してください。
+              </p>
+            )}
           </div>
 
           <div className="input-group">
