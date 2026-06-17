@@ -1,12 +1,19 @@
-import { useAtomValue } from "jotai";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { isLoginAtom } from "../stores/authAtom";
 import { LoginPage } from "../pages/LoginPage";
 import { SignUpPage } from "../pages/SignUpPage";
 import { TodoListPage } from "../pages/TodoListPage";
+import { useAtomValue } from "jotai";
+import { isAuthCheckingAtom, loginUserAtom } from "../stores/authAtom";
 
 export const AppRouter = () => {
-  const isLogin = useAtomValue(isLoginAtom);
+  const loginUser = useAtomValue(loginUserAtom);
+  const isAuthChecking = useAtomValue(isAuthCheckingAtom);
+
+  if (isAuthChecking) {
+    return <p>ログイン確認中...</p>;
+  }
+
+  const isLogin = loginUser !== null;
 
   return (
     <Routes>

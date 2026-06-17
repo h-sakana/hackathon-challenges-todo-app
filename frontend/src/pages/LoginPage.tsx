@@ -1,10 +1,72 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./LoginPage.css";
+import { useState } from "react";
+import { API_BASE_URL } from "../constants/constant";
 import { useSetAtom } from "jotai";
-import { isLoginAtom } from "../stores/authAtom";
+import { loginUserAtom } from "../stores/authAtom";
+
+type LocationState = {
+  state?: {
+    userName: string;
+  };
+};
+
+type AuthLoginRequest = {
+  name: string;
+  password: string;
+};
 
 export const LoginPage = () => {
-  const setIsLogin = useSetAtom(isLoginAtom);
+  const location: LocationState = useLocation();
+  const navigate = useNavigate();
+
+  const setLoginUser = useSetAtom(loginUserAtom);
+
+  /** 入力されたユーザー名 */
+  const [inputUserName, setInputUserName] = useState(
+    location.state?.userName ?? ""
+  );
+  /** 入力されたパスワード */
+  const [inputPassword, setInputPassword] = useState("");
+
+  /** ログイン認証 */
+  const handleAuthLogin = async () => {
+    try {
+      const request: AuthLoginRequest = {
+        name: inputUserName,
+        password: inputPassword,
+      };
+
+      const response = await fetch(`${API_BASE_URL}/api/login/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(request),
+      });
+
+      if (!response.ok) {
+        throw new Error("ログイン失敗");
+      }
+
+      const data = await response.json();
+
+      localStorage.setItem("accessToken", data.access);
+      localStorage.setItem("refreshToken", data.refresh);
+
+      setLoginUser({
+        id: data.user.id,
+        name: data.user.name,
+      });
+
+      navigate("/todos");
+    } catch (error) {
+      console.error(error);
+      alert(
+        "ログインできませんでした。\nユーザー名とパスワードを確認してください。"
+      );
+    }
+  };
 
   return (
     <>
@@ -17,19 +79,27 @@ export const LoginPage = () => {
         <div className="auth-form">
           <div className="input-group">
             <label>ユーザー名</label>
-            <input type="text" value="aaaaa" placeholder="ユーザー名" />
+            <input
+              type="text"
+              value={inputUserName}
+              onChange={(e) => setInputUserName(e.target.value)}
+              placeholder="ユーザー名"
+            />
           </div>
 
           <div className="input-group">
             <label>パスワード</label>
-            <input type="password" value="bbbb" placeholder="パスワード" />
+            <input
+              type="password"
+              value={inputPassword}
+              onChange={(e) => setInputPassword(e.target.value)}
+              placeholder="パスワード"
+            />
           </div>
 
           <button
             type="button"
-            onClick={() => {
-              setIsLogin(true);
-            }}
+            onClick={() => handleAuthLogin()}
             className="login-btn"
           >
             ログイン

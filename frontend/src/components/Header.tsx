@@ -1,9 +1,20 @@
-import { useSetAtom } from "jotai";
 import "./Header.css";
-import { isLoginAtom } from "../stores/authAtom";
+import { useNavigate } from "react-router-dom";
+import { useSetAtom } from "jotai";
+import { loginUserAtom } from "../stores/authAtom";
 
 export const Header = () => {
-  const setIsLogin = useSetAtom(isLoginAtom);
+  const navigate = useNavigate();
+  const setLoginUser = useSetAtom(loginUserAtom);
+
+  /** ログアウト処理 */
+  const handleLogout = async () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    setLoginUser(null);
+
+    navigate("/login");
+  };
 
   return (
     <header>
@@ -12,7 +23,7 @@ export const Header = () => {
         <p className="user-name-icon">S</p>
         <button
           onClick={() => {
-            setIsLogin(false);
+            handleLogout();
           }}
           className="logout-btn"
         >
