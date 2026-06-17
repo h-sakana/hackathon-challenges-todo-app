@@ -27,5 +27,5 @@ dist-ssr
 # environment
 .env
 
-# ather
+# other
 venv
