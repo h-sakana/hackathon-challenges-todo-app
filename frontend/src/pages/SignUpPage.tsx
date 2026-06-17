@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./SignUpPage.css";
 import { useState } from "react";
+import { API_BASE_URL } from "../constants/constant";
 
 export const SignUpPage = () => {
   const navigate = useNavigate();
@@ -29,8 +30,6 @@ export const SignUpPage = () => {
         password: inputPassword,
       };
 
-      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
       const response = await fetch(`${API_BASE_URL}/api/users/`, {
         method: "POST",
         headers: {
@@ -43,8 +42,10 @@ export const SignUpPage = () => {
         throw new Error("アカウント作成失敗");
       }
 
-      alert("アカウントを作成しました。ログインしてください。");
-      navigate("/login");
+      alert("アカウントを作成しました。\nログインしてください。");
+
+      // ログイン画面へ遷移（入力補完のためユーザー名を渡す）
+      navigate("/login", { state: { userName: inputUserName } });
     } catch (error) {
       console.error(error);
       alert("アカウント作成に失敗しました。");
