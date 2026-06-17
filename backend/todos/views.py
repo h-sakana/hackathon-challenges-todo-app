@@ -1,6 +1,15 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework_simplejwt.exceptions import TokenError
+from django.db import IntegrityError
+from django.contrib.auth.hashers import check_password, make_password
+from django.utils import timezone
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Todo, User
 from .serializers import TodoSerializer, UserSerializer
+
 
 class TodoViewSet(viewsets.ModelViewSet):
     queryset = Todo.objects.filter(deleted_at__isnull=True)
@@ -9,6 +18,32 @@ class TodoViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    def create(self, request, *args, **kwargs):
+        name = request.data.get("name")
+        password = request.data.get("password")
+
+        if not name or not password:
+            return Response(
+                {"message": "ユーザー名とパスワードは必須です。"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            user = User.objects.create(
+                name=name,
+                password=make_password(password)
+            )
+        except IntegrityError:
+            return Response(
+                {"message": "このユーザー名は既に使用されています。"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        return Response(
+            {"id": user.id, "name": user.name},
+            status=status.HTTP_201_CREATED
+        )
 
 class LoginView(APIView):
     authentication_classes = []
