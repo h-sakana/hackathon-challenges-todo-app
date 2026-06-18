@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./TodoListPage.css";
 import { Header } from "../components/Header";
 import { API_BASE_URL } from "../constants/constant";
+import { fetcher } from "../utils/fetcher";
 
 type Todo = {
   id: number;
@@ -28,26 +29,15 @@ export const TodoListPage = () => {
     }
 
     try {
-      const accessToken = localStorage.getItem("accessToken");
-
       const request: CreateTodoRequest = {
         name: inputTodoName,
       };
 
-      const response = await fetch(`${API_BASE_URL}/api/todos/`, {
+      const data = await fetcher({
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(request),
+        path: "api/todos/",
+        body: request,
       });
-
-      const data: Todo = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "タスクの作成に失敗しました。");
-      }
 
       setTodoList((prev) => [data, ...prev]);
       (selectTab === "not_del" ? setInputTodoName : setInputTodoName)("");
@@ -61,25 +51,11 @@ export const TodoListPage = () => {
 
   const handleDeleteTodo = async (id: number) => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
-
-      const response = await fetch(
-        `${API_BASE_URL}/api/todos/${id}/${
-          selectTab === "del" ? "?status=del" : ""
-        }`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      const data: Todo = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "タスクの削除に失敗しました。");
-      }
+      await fetcher({
+        method: "DELETE",
+        path: `api/todos/${id}/`,
+        params: { ...(selectTab === "del" && { status: "del" }) },
+      });
 
       if (selectTab === "not_del") {
         const targetTodo = todoList.find((todo) => todo.id === id);
@@ -109,22 +85,11 @@ export const TodoListPage = () => {
     if (editedName === null) return;
 
     try {
-      const accessToken = localStorage.getItem("accessToken");
-
-      const response = await fetch(`${API_BASE_URL}/api/todos/${id}/`, {
+      const data = await fetcher({
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ name: editedName }),
+        path: `api/todos/${id}/`,
+        body: { name: editedName },
       });
-
-      const data: Todo = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "タスクの編集に失敗しました。");
-      }
 
       (selectTab === "not_del" ? setTodoList : setDeletedTodoList)((prev) =>
         prev.map((todo) => (todo.id === id ? data : todo))
@@ -139,22 +104,11 @@ export const TodoListPage = () => {
 
   const handleCheckTodo = async (id: number, isChecked: boolean) => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
-
-      const response = await fetch(`${API_BASE_URL}/api/todos/${id}/`, {
+      const data = await fetcher({
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ is_checked: isChecked }),
+        path: `api/todos/${id}/`,
+        body: { is_checked: isChecked },
       });
-
-      const data: Todo = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "タスクの編集に失敗しました。");
-      }
 
       (selectTab === "not_del" ? setTodoList : setDeletedTodoList)((prev) =>
         prev.map((todo) => (todo.id === id ? data : todo))

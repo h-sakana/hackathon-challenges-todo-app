@@ -1,9 +1,9 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 import { useState } from "react";
-import { API_BASE_URL } from "../constants/constant";
 import { useSetAtom } from "jotai";
 import { loginUserAtom } from "../stores/authAtom";
+import { fetcher } from "../utils/fetcher";
 
 type LocationState = {
   state?: {
@@ -37,19 +37,11 @@ export const LoginPage = () => {
         password: inputPassword,
       };
 
-      const response = await fetch(`${API_BASE_URL}/api/login/`, {
+      const data = await fetcher({
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(request),
+        path: "api/login/",
+        body: request,
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "ログイン失敗");
-      }
 
       localStorage.setItem("accessToken", data.access);
       localStorage.setItem("refreshToken", data.refresh);

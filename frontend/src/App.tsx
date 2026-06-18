@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import "./App.css";
 import { AppRouter } from "./router/AppRouter";
-import { API_BASE_URL } from "./constants/constant";
 import { useSetAtom } from "jotai";
 import { isAuthCheckingAtom, loginUserAtom } from "./stores/authAtom";
+import { fetcher } from "./utils/fetcher";
 
 const App = () => {
   /** ログイン中のユーザー情報 */
@@ -23,18 +23,10 @@ const App = () => {
         }
 
         // ログイン状況チェック
-        const response = await fetch(`${API_BASE_URL}/api/login_check/`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+        const data = await fetcher({
+          method: "GET",
+          path: "api/login_check/",
         });
-
-        if (!response.ok) {
-          setLoginUser(null);
-          return;
-        }
-
-        const data = await response.json();
 
         setLoginUser({
           id: data.id,

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./SignUpPage.css";
 import { useState } from "react";
-import { API_BASE_URL } from "../constants/constant";
+import { fetcher } from "../utils/fetcher";
 
 export const SignUpPage = () => {
   const navigate = useNavigate();
@@ -30,18 +30,11 @@ export const SignUpPage = () => {
         password: inputPassword,
       };
 
-      const response = await fetch(`${API_BASE_URL}/api/users/`, {
+      await fetcher({
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(request),
+        path: "api/users/",
+        body: request,
       });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "アカウント作成失敗");
-      }
 
       alert("アカウントを作成しました。\nログインしてください。");
 
