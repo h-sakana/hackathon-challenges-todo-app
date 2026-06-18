@@ -1,6 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-class User(models.Model):
+
+class User(AbstractUser):
     name = models.CharField(unique=True, max_length=40)
     password = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)

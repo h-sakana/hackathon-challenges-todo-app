@@ -13,8 +13,10 @@ from .serializers import TodoSerializer, UserSerializer
 
 
 class TodoViewSet(viewsets.ModelViewSet):
-    queryset = Todo.objects.filter(deleted_at__isnull=True)
+    queryset = Todo.objects.none()
+    permission_classes = [IsAuthenticated]
     serializer_class = TodoSerializer
+    
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
