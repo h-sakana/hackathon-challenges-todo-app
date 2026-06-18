@@ -49,10 +49,6 @@ class TodoViewSet(viewsets.ModelViewSet):
             status=status.HTTP_200_OK
         )
         
-        
-
-
-
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -75,6 +71,7 @@ class UserViewSet(viewsets.ModelViewSet):
         
         try:
             user = User.objects.create(
+                username=name,
                 name=name,
                 password=make_password(password)
             )
