@@ -17,6 +17,41 @@ class TodoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = TodoSerializer
     
+    def get_queryset(self):
+        status = self.request.query_params.get("status")
+        
+        is_deleted = status == "del"
+
+        return Todo.objects.filter(
+            user=self.request.user,
+            deleted_at__isnull=not is_deleted
+        )
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+    
+    def destroy(self, request, *args, **kwargs):
+        todo = self.get_object()
+        
+        if todo.deleted_at is None:
+            todo.deleted_at = timezone.now()
+            todo.save()
+
+            return Response(
+                {"message": "タスクを論理削除しました。"},
+                status=status.HTTP_200_OK
+            )
+        
+        todo.delete()
+
+        return Response(
+            {"message": "タスクを物理削除しました。"},
+            status=status.HTTP_200_OK
+        )
+        
+        
+
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
