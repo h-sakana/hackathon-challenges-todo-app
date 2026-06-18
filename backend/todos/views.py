@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.db import IntegrityError
 from django.contrib.auth.hashers import check_password, make_password
 from django.utils import timezone
@@ -18,6 +19,12 @@ class TodoViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    def get_permissions(self):
+        if self.action == "create":
+            return [AllowAny()]
+        
+        return [IsAuthenticated()]
 
     def create(self, request, *args, **kwargs):
         name = request.data.get("name")
