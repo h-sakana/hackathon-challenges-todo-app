@@ -22,6 +22,11 @@ export const TodoListPage = () => {
   const [inputTodoName, setInputTodoName] = useState("");
 
   const handleCreateTodo = async () => {
+    if (inputTodoName.trim() === "") {
+      alert("タスク名を入力してください。");
+      return;
+    }
+
     try {
       const accessToken = localStorage.getItem("accessToken");
 
@@ -76,9 +81,22 @@ export const TodoListPage = () => {
         throw new Error(data.message || "タスクの削除に失敗しました。");
       }
 
-      (selectTab === "not_del" ? setTodoList : setDeletedTodoList)((prev) =>
-        prev.filter((todo) => todo.id !== id)
-      );
+      if (selectTab === "not_del") {
+        const targetTodo = todoList.find((todo) => todo.id === id);
+        if (!targetTodo) {
+          return;
+        }
+
+        setTodoList((prev) => prev.filter((todo) => todo.id !== id));
+        setDeletedTodoList((prev) => [targetTodo, ...prev]);
+      } else {
+        const targetTodo = deletedTodoList.find((todo) => todo.id === id);
+        if (!targetTodo) {
+          return;
+        }
+
+        setDeletedTodoList((prev) => prev.filter((todo) => todo.id !== id));
+      }
     } catch (error) {
       console.error(error);
       alert(
@@ -234,20 +252,22 @@ export const TodoListPage = () => {
                       type="button"
                       className={`checkbox ${todo.is_checked ? "checked" : ""}`}
                       onClick={() => {
-                        (selectTab === "not_del"
-                          ? setTodoList
-                          : setDeletedTodoList)((prev) => {
-                          const newChecked = !prev[index].is_checked;
-                          const newTodo = {
-                            ...prev[index],
-                            is_checked: newChecked,
-                          };
-                          const newTodoList = [...prev];
-                          newTodoList[index] = newTodo;
+                        if (selectTab === "not_del") {
+                          (selectTab === "not_del"
+                            ? setTodoList
+                            : setDeletedTodoList)((prev) => {
+                            const newChecked = !prev[index].is_checked;
+                            const newTodo = {
+                              ...prev[index],
+                              is_checked: newChecked,
+                            };
+                            const newTodoList = [...prev];
+                            newTodoList[index] = newTodo;
 
-                          return newTodoList;
-                        });
-                        handleCheckTodo(todo.id, !todo.is_checked);
+                            return newTodoList;
+                          });
+                          handleCheckTodo(todo.id, !todo.is_checked);
+                        }
                       }}
                     >
                       {todo.is_checked && "✔︎"}
