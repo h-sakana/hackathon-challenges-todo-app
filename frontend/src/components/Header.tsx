@@ -1,6 +1,6 @@
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
-import { useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { loginUserAtom } from "../stores/authAtom";
 
 export const Header = () => {
@@ -20,7 +20,9 @@ export const Header = () => {
     <header>
       <h1>Tasks</h1>
       <div className="user-info">
-        <p className="user-name-icon">S</p>
+        <p className="user-name-icon">
+          {useAtomValue(loginUserAtom)?.name?.[0]}
+        </p>
         <button
           onClick={() => {
             handleLogout();
