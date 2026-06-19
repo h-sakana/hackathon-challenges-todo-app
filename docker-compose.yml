@@ -1,22 +1,4 @@
 services:
-  db:
-    image: mysql:8.4
-    environment:
-      # 機密情報のため環境変数を参照
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DB_NAME}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
   backend:
     build: ./backend
     # ローカル用でコマンド上書き
@@ -26,30 +8,9 @@ services:
       DEBUG: ${DEBUG}
       ALLOWED_HOSTS: ${ALLOWED_HOSTS}
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
-      DATABASE_HOST: db
+      DATABASE_HOST: ${DB_HOST}
       DATABASE_NAME: ${DB_NAME}
       DATABASE_USER: ${DB_USER}
       DATABASE_PASSWORD: ${DB_PASSWORD}
     ports:
       - "8000:8000"
-    volumes:
-      - ./backend:/app
-    depends_on:
-      db:
-        # DBのヘルスチェックでサービスの起動okが返却されるまで待つ
-        condition: service_healthy
-
-  frontend:
-    build: ./frontend
-    ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/app
-      # node_modulesをホストとコンテナで共有すると
-      # ホストとコンテナのOS差分によりnode_modulesが壊れるため、共有対象から除外
-      - /app/node_modules
-    depends_on:
-      - backend
-
-volumes:
-  mysql_data:
