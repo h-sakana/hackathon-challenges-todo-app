@@ -20,7 +20,7 @@ services:
   backend:
     build: ./backend
     # ローカル用でコマンド上書き
-    command: python manage.py runserver 0.0.0.0:8000
+    command: ${BACKEND_COMMAND}
     environment:
       SECRET_KEY: ${SECRET_KEY}
       DEBUG: ${DEBUG}
