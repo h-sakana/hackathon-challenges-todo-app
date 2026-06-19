@@ -19,7 +19,13 @@ services:
 
   backend:
     build: ./backend
+    # ローカル用でコマンド上書き
+    command: python manage.py runserver 0.0.0.0:8000
     environment:
+      SECRET_KEY: ${SECRET_KEY}
+      DEBUG: ${DEBUG}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
       DATABASE_HOST: db
       DATABASE_NAME: ${DB_NAME}
       DATABASE_USER: ${DB_USER}
