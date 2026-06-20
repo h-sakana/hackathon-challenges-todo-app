@@ -2,7 +2,7 @@
 
 ## 機能紹介
 
-[Tasks\_機能紹介](https://h-sakana.github.io/hackathon-challenges-todo-app/slides/Tasks_機能紹介.html)
+[Tasks\_機能紹介](https://h-sakana.github.io/hackathon-challenges-todo-app/slides/Tasks.html)
 
 ## 使用技術
 
