@@ -33,6 +33,7 @@ export const SignUpPage = () => {
       await fetcher({
         method: "POST",
         path: "api/users/",
+        requiresAuth: false,
         body: request,
       });
 

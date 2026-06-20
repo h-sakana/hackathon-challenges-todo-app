@@ -4,6 +4,7 @@ type FetchOptions = {
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   path: string;
   params?: Record<string, string | number | boolean>;
+  requiresAuth?: boolean;
   body?: unknown;
 };
 
@@ -11,6 +12,7 @@ export const fetcher = async ({
   method = "GET",
   path,
   params,
+  requiresAuth = true,
   body,
 }: FetchOptions) => {
   const accessToken = localStorage.getItem("accessToken");
@@ -25,7 +27,8 @@ export const fetcher = async ({
     method,
     headers: {
       ...(body ? { "Content-Type": "application/json" } : {}),
-      ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      ...(requiresAuth &&
+        accessToken && { Authorization: `Bearer ${accessToken}` }),
     },
     body: body ? JSON.stringify(body) : undefined,
   });

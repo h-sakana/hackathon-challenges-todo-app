@@ -40,6 +40,7 @@ export const LoginPage = () => {
       const data = await fetcher({
         method: "POST",
         path: "api/login/",
+        requiresAuth: false,
         body: request,
       });
 
