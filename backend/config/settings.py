@@ -151,3 +151,8 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "todos.User"
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
