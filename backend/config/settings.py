@@ -69,6 +69,10 @@ CORS_ALLOWED_ORIGINS = os.environ.get(
     "http://localhost:5173"
 ).split(",")
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://todo.h-sakana.dev",
+]
+
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
