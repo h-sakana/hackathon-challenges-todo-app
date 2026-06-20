@@ -23,7 +23,8 @@ export const SignUpPage = () => {
   const [isPasswordError, setIsPasswordError] = useState(false);
 
   /** アカウントを作成 */
-  const handleCreateAccount = async () => {
+  const handleCreateAccount = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       const request: CreateAccountRequest = {
         name: inputUserName,
@@ -60,7 +61,7 @@ export const SignUpPage = () => {
           <p className="subtitle">アカウントを作成</p>
         </div>
 
-        <form className="create-form" onSubmit={(e) => e.preventDefault()}>
+        <form className="create-form" onSubmit={handleCreateAccount}>
           <div className="input-group">
             <label>ユーザー名</label>
             <input
@@ -128,14 +129,13 @@ export const SignUpPage = () => {
           </div>
 
           <button
-            type="button"
+            type="submit"
             disabled={
               inputUserName.length < 3 ||
               inputPassword.length < 8 ||
               inputPasswordConfirm.length < 8 ||
               inputPassword !== inputPasswordConfirm
             }
-            onClick={() => handleCreateAccount()}
             className="create-btn"
           >
             アカウント作成

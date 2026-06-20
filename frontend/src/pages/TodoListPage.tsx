@@ -22,7 +22,8 @@ export const TodoListPage = () => {
   const [deletedTodoList, setDeletedTodoList] = useState<Todo[]>([]);
   const [inputTodoName, setInputTodoName] = useState("");
 
-  const handleCreateTodo = async () => {
+  const handleCreateTodo = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (inputTodoName.trim() === "") {
       alert("タスク名を入力してください。");
       return;
@@ -163,7 +164,7 @@ export const TodoListPage = () => {
       <main>
         <h2>タスク一覧</h2>
 
-        <div className="todo-create-form">
+        <form className="todo-create-form" onSubmit={handleCreateTodo}>
           <input
             type="text"
             placeholder="タスクを入力"
@@ -171,13 +172,10 @@ export const TodoListPage = () => {
             onChange={(e) => setInputTodoName(e.target.value)}
             className="todo-create-input"
           />
-          <button
-            onClick={() => handleCreateTodo()}
-            className="todo-create-btn"
-          >
+          <button type="submit" className="todo-create-btn">
             追加
           </button>
-        </div>
+        </form>
 
         <div className="todo-tab">
           <ul>

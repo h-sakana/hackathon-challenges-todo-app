@@ -30,7 +30,8 @@ export const LoginPage = () => {
   const [inputPassword, setInputPassword] = useState("");
 
   /** ログイン認証 */
-  const handleAuthLogin = async () => {
+  const handleAuthLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       const request: AuthLoginRequest = {
         name: inputUserName,
@@ -71,7 +72,7 @@ export const LoginPage = () => {
           <p className="subtitle">シンプルなタスク管理</p>
         </div>
 
-        <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
+        <form className="auth-form" onSubmit={handleAuthLogin}>
           <div className="input-group">
             <label>ユーザー名</label>
             <input
@@ -92,11 +93,7 @@ export const LoginPage = () => {
             />
           </div>
 
-          <button
-            type="button"
-            onClick={() => handleAuthLogin()}
-            className="login-btn"
-          >
+          <button type="submit" className="login-btn">
             ログイン
           </button>
         </form>
