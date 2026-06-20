@@ -70,7 +70,7 @@ export const LoginPage = () => {
           <p className="subtitle">シンプルなタスク管理</p>
         </div>
 
-        <div className="auth-form">
+        <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
           <div className="input-group">
             <label>ユーザー名</label>
             <input
@@ -98,7 +98,7 @@ export const LoginPage = () => {
           >
             ログイン
           </button>
-        </div>
+        </form>
 
         <div className="user-create">
           <p>アカウントがない方は</p>
