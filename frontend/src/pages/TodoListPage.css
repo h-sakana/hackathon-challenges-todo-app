@@ -4,6 +4,7 @@
 }
 
 main {
+  padding-top: 112px;
   max-width: 350px;
   width: calc(100% - 32px);
   margin: 0 auto;
