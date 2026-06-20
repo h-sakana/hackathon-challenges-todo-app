@@ -27,6 +27,8 @@ dist-ssr
 # environment
 .env
 .env.production
+# フロントの.envはgit管理する
+!frontend/.env*
 
 # other
 venv
